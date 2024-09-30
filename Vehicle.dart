@@ -1,34 +1,66 @@
 import 'dart:io';
 
-// Base class Vehicle
 abstract class Vehicle {
   String name;
   double speed;
 
-  // Constructor for Vehicle
   Vehicle(this.name, this.speed);
 
-  // Abstract method to be implemented by subclasses
   void move();
+
+  // Define a method to check speed, but allow subclasses to implement their own logic
+  void checkSpeed();
 }
 
-// Subclass Car that extends Vehicle
 class Car extends Vehicle {
   Car(String name, double speed) : super(name, speed);
 
   @override
   void move() {
-    print('The $name moves fast on roads at $speed km/h.');
+    print('$name (Car) is driving.');
+    checkSpeed();
+  }
+
+  @override
+  void checkSpeed() {
+    String speedCategory;
+
+    if (speed > 80) {
+      speedCategory = 'fast';
+    } else if (speed >= 40 && speed <= 70) {
+      speedCategory = 'normal';
+    } else {
+      speedCategory = 'slow';
+    }
+
+    print(
+        '$name (Car) is moving at $speed km/h, which is considered $speedCategory.');
   }
 }
 
-// Subclass Bike that extends Vehicle
 class Bike extends Vehicle {
   Bike(String name, double speed) : super(name, speed);
 
   @override
   void move() {
-    print('The $name moves swiftly through traffic at $speed km/h.');
+    print('$name (Bike) is cycling.');
+    checkSpeed();
+  }
+
+  @override
+  void checkSpeed() {
+    String speedCategory;
+
+    if (speed > 30) {
+      speedCategory = 'fast';
+    } else if (speed >= 10 && speed <= 20) {
+      speedCategory = 'normal';
+    } else {
+      speedCategory = 'slow';
+    }
+
+    print(
+        '$name (Bike) is moving at $speed km/h, which is considered $speedCategory.');
   }
 }
 

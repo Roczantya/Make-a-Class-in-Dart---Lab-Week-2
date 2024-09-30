@@ -1,88 +1,112 @@
 import 'dart:io';
 
 class BankAccount {
-  double _balance;
+  String accountHolder; // Pemegang akun
+  double balance; // Saldo akun
+  static const double interestRate = 0.01; // Suku bunga tetap 1%
+  static const double minTransactionAmount =
+      50000; // Jumlah transaksi minimum dalam Rupiah
 
-  BankAccount(this._balance);
+  // Konstruktor untuk kelas BankAccount
+  BankAccount(this.accountHolder, this.balance);
 
-  void Deposit(double amount) {
-    if (amount > 0) {
-      _balance += amount;
-      print('Deposite: \$${amount}');
-    } else {
-      print('Mulailah coba deposito');
+  // Metode untuk menyetor uang
+  void deposit(double amount) {
+    if (amount < minTransactionAmount) {
+      print('Jumlah setoran harus minimal Rp $minTransactionAmount');
+      return;
     }
+    balance += amount;
+    print('Setoran: Rp ${amount.toStringAsFixed(2)}');
+    print('Saldo baru: Rp ${balance.toStringAsFixed(2)}');
   }
 
+  // Metode untuk menarik uang
   void withdraw(double amount) {
-    if (amount > 0 && amount <= _balance) {
-      _balance -= amount;
-      print('WithDraw: \$${amount}');
+    if (amount < minTransactionAmount) {
+      print('Jumlah penarikan harus minimal Rp $minTransactionAmount');
+      return;
+    }
+    if (amount > balance) {
+      print(
+          'Dana tidak cukup. Saldo saat ini: Rp ${balance.toStringAsFixed(2)}');
     } else {
-      print('invalid withdrawal amount');
+      balance -= amount;
+      print('Penarikan: Rp ${amount.toStringAsFixed(2)}');
+      print('Saldo baru: Rp ${balance.toStringAsFixed(2)}');
     }
   }
 
-  double checkbalance() {
-    return _balance;
-  }
-}
-
-class SavingAccount extends BankAccount {
-  double InterestRate;
-
-  SavingAccount(double balance, this.InterestRate) : super(balance);
-
+  // Metode untuk menerapkan bunga pada saldo
   void applyInterest() {
-    double interest = checkbalance() * InterestRate / 100;
-    Deposit(interest);
-    print('Interest applied: \$${interest}');
+    double interest = balance * interestRate;
+    balance += interest;
+    print('Bunga yang diterapkan: Rp ${interest.toStringAsFixed(2)}');
+    print('Saldo baru setelah bunga: Rp ${balance.toStringAsFixed(2)}');
+  }
+
+  // Metode untuk menampilkan informasi akun
+  void displayAccountInfo() {
+    print('Pemegang Akun: $accountHolder');
+    print('Saldo: Rp ${balance.toStringAsFixed(2)}');
+    print('Suku Bunga Bulanan: ${interestRate * 100}%');
   }
 }
 
 void main() {
-  // Get initial balance from user
-  stdout.write('Enter initial balance: ');
+  stdout.write('Masukkan nama pemegang akun: ');
+  String name = stdin.readLineSync()!;
+  stdout.write('Masukkan saldo awal: ');
   double initialBalance = double.parse(stdin.readLineSync()!);
 
-  // Get interest rate for SavingsAccount
-  stdout.write('Enter interest rate (in %): ');
-  double interestRate = double.parse(stdin.readLineSync()!);
-
-  // Create a SavingsAccount object
-  SavingAccount savings = SavingAccount(initialBalance, interestRate);
+  BankAccount account = BankAccount(name, initialBalance);
 
   bool running = true;
 
   while (running) {
-    print(
-        '\n1. Deposit\n2. Withdraw\n3. Check Balance\n4. Apply Interest\n5. Exit');
-    stdout.write('Choose an option: ');
+    print('\n---Menu Bank BCA---');
+    print('1. Tampilkan Informasi Akun');
+    print('2. Setor Uang');
+    print('3. Tarik Uang');
+    print('4. Terapkan Bunga');
+    print('5. Keluar');
+    stdout.write('Pilih opsi: ');
+
     int choice = int.parse(stdin.readLineSync()!);
 
     switch (choice) {
       case 1:
-        stdout.write('Enter amount to deposit: ');
-        double depositAmount = double.parse(stdin.readLineSync()!);
-        savings.Deposit(depositAmount);
+        // Tampilkan informasi akun
+        account.displayAccountInfo();
         break;
+
       case 2:
-        stdout.write('Enter amount to withdraw: ');
-        double withdrawAmount = double.parse(stdin.readLineSync()!);
-        savings.withdraw(withdrawAmount);
+        // Setor uang
+        stdout.write('Masukkan jumlah yang ingin disetor: ');
+        double depositAmount = double.parse(stdin.readLineSync()!);
+        account.deposit(depositAmount);
         break;
+
       case 3:
-        print('Balance: \$${savings.checkbalance()}');
+        // Tarik uang
+        stdout.write('Masukkan jumlah yang ingin ditarik: ');
+        double withdrawAmount = double.parse(stdin.readLineSync()!);
+        account.withdraw(withdrawAmount);
         break;
+
       case 4:
-        savings.applyInterest();
+        // Terapkan bunga
+        account.applyInterest();
         break;
+
       case 5:
+        // Keluar dari program
         running = false;
-        print('Exiting...');
+        print('Keluar...');
         break;
+
       default:
-        print('Invalid option. Please try again.');
+        print('Opsi tidak valid. Silakan coba lagi.');
     }
   }
 }

@@ -1,72 +1,68 @@
 import 'dart:io';
 
 class ATM {
-  double _balance;
+  double _balance = 0; // Atribut privat untuk menyimpan saldo
 
-  ATM(this._balance);
-
-  void Deposit(double Amount) {
-    if (Amount > 0) {
-      _balance += Amount;
-      print('Deposited: \$${Amount}');
+  void deposit(double amount) {
+    // Menyimpan uang ke dalam rekening
+    if (amount >= 50000) {
+      // Jumlah deposit minimum
+      _balance += amount;
+      print('Berhasil menyetor: $amount Rupiah');
     } else {
-      print('Mulailah coba menabung  ');
+      print('Jumlah setoran minimum adalah 50.000 Rupiah');
     }
   }
 
   void withdraw(double amount) {
-    if (amount > 0 && amount <= _balance) {
-      _balance -= amount;
-      print('Withdrawn: \$${amount}');
-    } else if (amount > _balance) {
-      print('Insufficient funds. Available balance: \$${_balance}');
+    // Menarik uang dari rekening
+    if (amount >= 50000) {
+      // Jumlah penarikan minimum
+      if (amount <= _balance) {
+        _balance -= amount;
+        print('Berhasil menarik: $amount Rupiah');
+      } else {
+        print('Saldo tidak cukup');
+      }
     } else {
-      print('Invalid withdrawal amount.');
+      print('Jumlah penarikan minimum adalah 50.000 Rupiah');
     }
   }
 
-  double checkbalance() {
+  double checkBalance() {
+    // Memeriksa saldo saat ini
     return _balance;
   }
 }
 
 void main() {
-  // Input saldo awal dari pengguna
-  stdout.write('Masukkan saldo awal: ');
-  double initialBalance = double.parse(stdin.readLineSync()!);
-
-  // Membuat objek ATM dengan saldo awal dari input pengguna
-  ATM atm = ATM(initialBalance);
-
-  bool running = true;
-
-  while (running) {
-    print('\n1. Deposit\n2. Withdraw\n3. Cek Saldo\n4. Keluar');
-    stdout.write('Pilih opsi: ');
-    int choice = int.parse(stdin.readLineSync()!);
+  ATM atm = ATM();
+  while (true) {
+    print('--- Menu ATM ---');
+    print('1. Setor Uang');
+    print('2. Tarik Uang');
+    print('3. Periksa Saldo');
+    print('4. Keluar');
+    stdout.write('Pilih opsi (1-4): ');
+    String? choice = stdin.readLineSync();
 
     switch (choice) {
-      case 1:
-        // Input untuk deposit
-        stdout.write('Masukkan jumlah deposit: ');
+      case '1':
+        stdout.write('Masukkan jumlah setoran: ');
         double depositAmount = double.parse(stdin.readLineSync()!);
-        atm.Deposit(depositAmount);
+        atm.deposit(depositAmount);
         break;
-      case 2:
-        // Input untuk withdraw
+      case '2':
         stdout.write('Masukkan jumlah penarikan: ');
         double withdrawAmount = double.parse(stdin.readLineSync()!);
         atm.withdraw(withdrawAmount);
         break;
-      case 3:
-        // Cek saldo
-        print('Saldo saat ini: \$${atm.checkbalance()}');
+      case '3':
+        print('Saldo saat ini: ${atm.checkBalance()} Rupiah');
         break;
-      case 4:
-        // Keluar dari program
-        running = false;
-        print('Keluar...');
-        break;
+      case '4':
+        print('Terima kasih! Keluar dari ATM.');
+        return;
       default:
         print('Pilihan tidak valid. Silakan coba lagi.');
     }

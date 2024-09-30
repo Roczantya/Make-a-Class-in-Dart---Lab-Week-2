@@ -8,14 +8,15 @@ class Book {
   // Constructor for Book class
   Book(this.title, this.author, this.year);
 
-  // Method to display book information
+  // Method to display book information in two lines
   String displayInfo() {
-    return 'Title: $title, Author: $author, Year: $year';
+    return '${title}\nAuthor: $author, Year: $year';
   }
 }
 
 class Library {
   List<Book> _books = []; // Private list to store books
+  List<Book> _removedBooks = []; // Private list to store removed books
 
   // Method to add a book to the library
   void addBook(Book book) {
@@ -24,20 +25,43 @@ class Library {
   }
 
   // Method to remove a book from the library
-  void removeBook(String title) {
-    _books.removeWhere((book) => book.title == title);
-    print('Book removed: $title');
+  void removeBook(int index) {
+    if (index < 0 || index >= _books.length) {
+      print('Invalid index. Unable to remove book.');
+      return;
+    }
+
+    Book bookToRemove = _books[index];
+    print('Found book:\n${bookToRemove.displayInfo()}');
+    stdout.write('Are you sure you want to remove this book? (yes/no): ');
+    String confirmation = stdin.readLineSync()!.toLowerCase();
+
+    if (confirmation == 'yes') {
+      _books.removeAt(index);
+      _removedBooks.add(bookToRemove); // Add to removed books list
+      print('Book removed: ${bookToRemove.title}');
+    } else {
+      print('Removal canceled.');
+    }
   }
 
   // Method to display all books in the library
   void displayBooks() {
     if (_books.isEmpty) {
-      print('No books in the library.');
-      return;
+      print('No books available in the library.');
+    } else {
+      print('Available books:');
+      for (var i = 0; i < _books.length; i++) {
+        print('${i + 1}. ${_books[i].displayInfo()}');
+      }
     }
-    print('Books in the library:');
-    for (var book in _books) {
-      print(book.displayInfo());
+
+    // Display removed books
+    if (_removedBooks.isNotEmpty) {
+      print('\nRemoved books:');
+      for (var book in _removedBooks) {
+        print(book.displayInfo());
+      }
     }
   }
 }
@@ -58,7 +82,7 @@ void main() {
 
     switch (choice) {
       case 1:
-        // Input untuk menambahkan buku
+        // Input to add a book
         stdout.write('Enter book title: ');
         String title = stdin.readLineSync()!;
         stdout.write('Enter author name: ');
@@ -69,19 +93,21 @@ void main() {
         break;
 
       case 2:
-        // Menampilkan semua buku
+        // Displaying all books
         library.displayBooks();
         break;
 
       case 3:
-        // Input untuk menghapus buku
-        stdout.write('Enter the title of the book to remove: ');
-        String titleToRemove = stdin.readLineSync()!;
-        library.removeBook(titleToRemove);
+        // Input to remove a book
+        library.displayBooks(); // Show available books before removing
+        stdout.write('Enter the number of the book to remove: ');
+        int bookIndex =
+            int.parse(stdin.readLineSync()!) - 1; // Adjust for zero-based index
+        library.removeBook(bookIndex);
         break;
 
       case 4:
-        // Keluar dari program
+        // Exit the program
         running = false;
         print('Exiting...');
         break;
