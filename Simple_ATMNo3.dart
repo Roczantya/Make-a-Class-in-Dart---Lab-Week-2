@@ -1,39 +1,5 @@
 import 'dart:io';
-
-class ATM {
-  double _balance = 0; // Atribut privat untuk menyimpan saldo
-
-  void deposit(double amount) {
-    // Menyimpan uang ke dalam rekening
-    if (amount >= 50000) {
-      // Jumlah deposit minimum
-      _balance += amount;
-      print('Berhasil menyetor: $amount Rupiah');
-    } else {
-      print('Jumlah setoran minimum adalah 50.000 Rupiah');
-    }
-  }
-
-  void withdraw(double amount) {
-    // Menarik uang dari rekening
-    if (amount >= 50000) {
-      // Jumlah penarikan minimum
-      if (amount <= _balance) {
-        _balance -= amount;
-        print('Berhasil menarik: $amount Rupiah');
-      } else {
-        print('Saldo tidak cukup');
-      }
-    } else {
-      print('Jumlah penarikan minimum adalah 50.000 Rupiah');
-    }
-  }
-
-  double checkBalance() {
-    // Memeriksa saldo saat ini
-    return _balance;
-  }
-}
+import 'BankNo3.dart';
 
 void main() {
   ATM atm = ATM();

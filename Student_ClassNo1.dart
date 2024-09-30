@@ -1,22 +1,5 @@
 import 'dart:io';
-
-class Student {
-  String name;
-  int studentID;
-  int grade;
-
-  Student(this.name, this.studentID, this.grade);
-
-  void displayInfo() {
-    print('Studet ID: $studentID');
-    print('Name: $name');
-    print('Grade: $grade');
-  }
-
-  bool checkpass() {
-    return grade >= 70;
-  }
-}
+import 'StudentNo1.dart';
 
 void main() {
   stdout.write('Enter Student ID: ');
@@ -34,7 +17,7 @@ void main() {
 
   student.displayInfo();
 
-  if (student.checkpass()) {
+  if (student.checkPass()) {
     print('Status: Passed');
   } else {
     print('Status: Failed');

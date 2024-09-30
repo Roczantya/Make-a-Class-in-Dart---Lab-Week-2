@@ -1,14 +1,31 @@
-import 'dart:io';
-
 abstract class Vehicle {
-  String name;
-  double speed;
+  String _name; // Private attribute
+  double _speed; // Private attribute
 
-  Vehicle(this.name, this.speed);
+  Vehicle(this._name, this._speed);
+
+  // Getter for name
+  String get name => _name;
+
+  // Setter for name
+  set name(String name) {
+    _name = name;
+  }
+
+  // Getter for speed
+  double get speed => _speed;
+
+  // Setter for speed with validation
+  set speed(double speed) {
+    if (speed >= 0) {
+      _speed = speed;
+    } else {
+      print('Speed cannot be negative.');
+    }
+  }
 
   void move();
 
-  // Define a method to check speed, but allow subclasses to implement their own logic
   void checkSpeed();
 }
 
@@ -25,9 +42,9 @@ class Car extends Vehicle {
   void checkSpeed() {
     String speedCategory;
 
-    if (speed > 80) {
+    if (speed > 60) {
       speedCategory = 'fast';
-    } else if (speed >= 40 && speed <= 70) {
+    } else if (speed >= 30 && speed <= 60) {
       speedCategory = 'normal';
     } else {
       speedCategory = 'slow';
@@ -62,31 +79,4 @@ class Bike extends Vehicle {
     print(
         '$name (Bike) is moving at $speed km/h, which is considered $speedCategory.');
   }
-}
-
-void main() {
-  stdout.write(
-      'Do you want to create a Car or a Bike? (Enter "Car" or "Bike"): ');
-  String choice = stdin.readLineSync()!.toLowerCase();
-
-  stdout.write('Enter the name of the vehicle: ');
-  String name = stdin.readLineSync()!;
-
-  stdout.write('Enter the speed of the vehicle (in km/h): ');
-  double speed = double.parse(stdin.readLineSync()!);
-
-  Vehicle vehicle;
-
-  // Create an instance based on user input
-  if (choice == 'car') {
-    vehicle = Car(name, speed);
-  } else if (choice == 'bike') {
-    vehicle = Bike(name, speed);
-  } else {
-    print('Invalid choice. Please enter "Car" or "Bike".');
-    return;
-  }
-
-  // Call the move method
-  vehicle.move();
 }
