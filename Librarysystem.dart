@@ -1,16 +1,16 @@
 import 'dart:io';
 
 class Book {
-  String title;
-  String author;
-  int year;
+  String Title;
+  String Author;
+  int Year;
 
   // Constructor for Book class
-  Book(this.title, this.author, this.year);
+  Book(this.Title, this.Author, this.Year);
 
   // Method to display book information in two lines
   String displayInfo() {
-    return '${title}\nAuthor: $author, Year: $year';
+    return '${Title}\nAuthor: $Author\nYear: $Year';
   }
 }
 
@@ -21,7 +21,7 @@ class Library {
   // Method to add a book to the library
   void addBook(Book book) {
     _books.add(book);
-    print('Book added: ${book.title}');
+    print('Book added: ${book.Title}');
   }
 
   // Method to remove a book from the library
@@ -39,7 +39,7 @@ class Library {
     if (confirmation == 'yes') {
       _books.removeAt(index);
       _removedBooks.add(bookToRemove); // Add to removed books list
-      print('Book removed: ${bookToRemove.title}');
+      print('Book removed: ${bookToRemove.Title}');
     } else {
       print('Removal canceled.');
     }
@@ -83,13 +83,13 @@ void main() {
     switch (choice) {
       case 1:
         // Input to add a book
-        stdout.write('Enter book title: ');
-        String title = stdin.readLineSync()!;
-        stdout.write('Enter author name: ');
-        String author = stdin.readLineSync()!;
-        stdout.write('Enter publication year: ');
-        int year = int.parse(stdin.readLineSync()!);
-        library.addBook(Book(title, author, year));
+        stdout.write('Enter book Title: ');
+        String Title = stdin.readLineSync()!;
+        stdout.write('Enter Author name: ');
+        String Author = stdin.readLineSync()!;
+        stdout.write('Enter publication Year: ');
+        int Year = int.parse(stdin.readLineSync()!);
+        library.addBook(Book(Title, Author, Year));
         break;
 
       case 2:
